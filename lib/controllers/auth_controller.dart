@@ -8,11 +8,31 @@ import 'package:tiktok_clone/views/screens/auth_screens/login_screen/login_scree
 import '../models/user_model.dart' as model;
 
 import '../constants.dart';
+import '../views/screens/controll_screen/controll_screen.dart';
 
 class AuthController extends GetxController{
   static AuthController instance = Get.find();
   late Rx<File?> _pickedImage;
   File? get profilePhoto => _pickedImage.value;
+
+  late Rx<User?> _user;
+  User get user => _user.value!;
+
+  @override
+  void onReady() {
+    super.onReady();
+    _user = Rx<User?>(firebaseAuth.currentUser);
+    _user.bindStream(firebaseAuth.authStateChanges());
+    ever(_user, _setInitialScreen);
+  }
+
+  _setInitialScreen(User? user) {
+    if (user == null) {
+      Get.offAll(() => LoginScreen());
+    } else {
+      Get.offAll(() => const ControllScreen());
+    }
+  }
 
   Future<String> _uploadToStorage(File image) async {
     Reference ref = firebaseStorage
@@ -84,7 +104,7 @@ class AuthController extends GetxController{
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
         await firebaseAuth.signInWithEmailAndPassword(
-            email: email, password: password);
+            email: email, password: password).then((value) =>Get.offAll(()=>const ControllScreen()));
       } else {
         Get.snackbar(
           'Error Logging in',
@@ -93,7 +113,7 @@ class AuthController extends GetxController{
       }
     } catch (e) {
       Get.snackbar(
-        'Error Loggin gin',
+        'Error Login',
         e.toString(),
       );
     }
