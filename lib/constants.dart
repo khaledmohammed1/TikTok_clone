@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:tiktok_clone/controllers/auth_controller.dart';
 
 import 'views/screens/add_video_screen/add_video.dart';
+import 'views/screens/video_screen/video_screen.dart';
 
 const backgroundColor = Colors.black;
 var buttonColor = Colors.red[400];
@@ -16,11 +17,11 @@ var firestore = FirebaseFirestore.instance;
 
 var authController = AuthController.instance;
 
-List pages = const [
-  Text('Video Screen'),
-  Text('Search Screen'),
-  AddVideoScreen(),
-  Text('Messages Screen'),
-  Text('Profile Screen '),
+List pages =  [
+  VideoScreen(),
+  const Text('Search Screen'),
+  const AddVideoScreen(),
+  const Text('Messages Screen'),
+  const Text('Profile Screen '),
 
 ];

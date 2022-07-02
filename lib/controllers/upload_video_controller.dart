@@ -66,8 +66,8 @@ class UploadVideoController extends GetxController {
 
       await firestore.collection('videos').doc('Video $len').set(
         video.toJson(),
-      );
-      Get.back();
+      ).then((value)=>Get.back());
+
     } catch (e) {
       Get.snackbar(
         'Error Uploading Video',
